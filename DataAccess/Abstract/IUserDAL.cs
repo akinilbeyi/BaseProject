@@ -4,7 +4,7 @@ using Entities.Dto;
 namespace DataAccess.Abstract;
 public interface IUserDAL
 {
-    Task<UserDto> GetById(int userId);
+    Task<User> GetById(int userId);
     Task<IEnumerable<UserDto>> GetAll();
     Task<bool> DeleteById(int userId);
     Task<bool> Update(User user);

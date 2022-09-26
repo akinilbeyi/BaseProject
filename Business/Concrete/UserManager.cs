@@ -1,21 +1,25 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dto;
+using Microsoft.AspNetCore.DataProtection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Business.Concrete;
 public class UserManager: IUserService
 {
     private readonly IUserDAL _userDAL;
-
-    public UserManager(IUserDAL userDAL)
+    private readonly IMapper _mapper;
+    public UserManager(IUserDAL userDAL, IMapper mapper)
     {
         _userDAL = userDAL;
+        _mapper = mapper;
     }
 
     public async Task<UserDto> Add(UserDto user)
@@ -23,24 +27,11 @@ public class UserManager: IUserService
 
         user.CreatedAt= DateTime.Now;
         user.CreatedBy = 0;
-        user.UpdatedAt= DateTime.Now;
-        user.UpdatedBy = 0;
 
-        var userEntity = new User()
-        {
-            Id = 0,
-            Email = user.Email,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            IsActive = user.IsActive,
-            Password = user.Password,
-            CreatedAt = user.CreatedAt,
-            CreatedBy = user.CreatedBy,
-            UpdatedBy = user.UpdatedBy,
-            UpdatedAt = user.UpdatedAt
-        };
 
-       var result = await _userDAL.Insert(userEntity);
+        var entity = _mapper.Map<User>(user);
+
+       var result = await _userDAL.Insert(entity);
 
         user.Id = result;
 
@@ -51,21 +42,10 @@ public class UserManager: IUserService
         user.UpdatedAt = DateTime.Now;
         user.UpdatedBy = 0;
 
-        var userEntity = new User()
-        {
-            Id = user.Id,
-            Email = user.Email,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            IsActive = user.IsActive,
-            Password = user.Password,
-            CreatedAt = user.CreatedAt,
-            CreatedBy = user.CreatedBy,
-            UpdatedBy = user.UpdatedBy,
-            UpdatedAt = user.UpdatedAt
-        };
 
-        var result = await _userDAL.Update(userEntity);
+        var entity = _mapper.Map<User>(user);
+
+        var result = await _userDAL.Update(entity);
         return result;
     }
     public async Task<bool> DeleteById(int userId)
@@ -82,6 +62,8 @@ public class UserManager: IUserService
     public async Task<UserDto> GetById(int userId)
     {
         var result = await _userDAL.GetById(userId);
-        return result;
+
+       var entity =  _mapper.Map<UserDto>(result);
+        return entity;
     }
 }

@@ -40,7 +40,7 @@ public class UserDAL : IUserDAL
         return result;
     }
 
-    public async Task<UserDto> GetById(int userId)
+    public async Task<User> GetById(int userId)
     {
         string sqlQuery = "SELECT * FROM [User] WHERE Id=@Id";
 
@@ -49,7 +49,7 @@ public class UserDAL : IUserDAL
             Id = userId
         };
 
-        var result = await _connection.QuerySingleOrDefaultAsync<UserDto>(sqlQuery, p, commandType: CommandType.Text);
+        var result = await _connection.QuerySingleOrDefaultAsync<User>(sqlQuery, p, commandType: CommandType.Text);
         return result;
     }
 
