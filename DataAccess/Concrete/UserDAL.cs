@@ -52,6 +52,18 @@ public class UserDAL : IUserDAL
         var result = await _connection.QuerySingleOrDefaultAsync<User>(sqlQuery, p, commandType: CommandType.Text);
         return result;
     }
+    public async Task<UserDto> GetByEmail(string email)
+    {
+        string sqlQuery = "SELECT * FROM [User] WHERE Email=@Email";
+
+        var p = new
+        {
+            Email = email
+        };
+
+        var result = await _connection.QuerySingleOrDefaultAsync<UserDto>(sqlQuery, p, commandType: CommandType.Text);
+        return result;
+    }
 
     public async Task<int> Insert(User user)
     {
