@@ -10,7 +10,7 @@ public class DataHashingHelper
     private IDataProtector? _dataProtector;
     public DataHashingHelper(IConfiguration configuration)
     {
-        var dataProtector = ServiceCollectionHelper.ServiceProvider?.GetService<IDataProtectionProvider>();
+        var dataProtector = IoCHelper.ServiceProvider?.GetService<IDataProtectionProvider>();
 
         _dataProtector = dataProtector?.CreateProtector(configuration["ProtectionKey"]);
 

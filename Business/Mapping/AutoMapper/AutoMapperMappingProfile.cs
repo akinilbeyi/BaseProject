@@ -10,7 +10,7 @@ public class AutoMapperMappingProfile : Profile
 {
     public AutoMapperMappingProfile()
     {
-        var hashingHelper = ServiceCollectionHelper.ServiceProvider?.GetService<DataHashingHelper>();
+        var hashingHelper = IoCHelper.ServiceProvider?.GetService<DataHashingHelper>();
 
         CreateMap<UserDto, User>()
             .ForMember(x => x.PasswordHash, source => source.MapFrom(s => hashingHelper!.Protect(s.Password!)));
