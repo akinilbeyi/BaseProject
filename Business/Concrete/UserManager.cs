@@ -48,6 +48,7 @@ public class UserManager : IUserService
 
         var passwordMatched = HashingHelper.VerifyPasswordHash(user?.Password, userEntity?.PasswordHash, userEntity?.PasswordSalt);
 
+
         if (passwordMatched == false)
             return false;
 
