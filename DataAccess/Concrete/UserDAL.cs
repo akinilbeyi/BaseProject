@@ -40,13 +40,25 @@ public class UserDAL : IUserDAL
         return result;
     }
 
-    public async Task<UserDto> GetById(int userId)
+    public async Task<User> GetById(int userId)
     {
         string sqlQuery = "SELECT * FROM [User] WHERE Id=@Id";
 
         var p = new
         {
             Id = userId
+        };
+
+        var result = await _connection.QuerySingleOrDefaultAsync<User>(sqlQuery, p, commandType: CommandType.Text);
+        return result;
+    }
+    public async Task<UserDto> GetByEmail(string email)
+    {
+        string sqlQuery = "SELECT * FROM [User] WHERE Email=@Email";
+
+        var p = new
+        {
+            Email = email
         };
 
         var result = await _connection.QuerySingleOrDefaultAsync<UserDto>(sqlQuery, p, commandType: CommandType.Text);
